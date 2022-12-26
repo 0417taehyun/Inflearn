@@ -1,31 +1,50 @@
 <template>
-  <div class="name"> {{ name }} </div>
-  <div class="name"> {{ student }} </div>
-  <button class="btn btn-primary" v-on:click="updateName">Click me</button>  
+  <div class="container">
+    <h2>To-do List</h2>
+    <TodoSimpleFormVue @add-todo="addTodo" />
+    <div v-if="!todos.length">
+        Empty
+    </div>	
+	<TodoList
+		:todos="todos"
+		@toggle-todo="updateTodo"
+		@delete-todo="deleteTodo"
+	/>
+
+  </div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue';
+	import { reactive } from 'vue';
+	import TodoSimpleFormVue from './components/TodoSimpleForm.vue';
+	import TodoList from './components/TodoList.vue';
 
-export default {
-  setup() {
-    const name = ref("Test");
-    const student = reactive({id: -1})
-    const updateName = () => {
-      name.value = "Taehyun Lee";
-      student.id = 201602719;
-    }
-    return {
-      name,
-      student,
-      updateName,
-    };
-  }
-}
+	export default {
+		components: {
+			TodoSimpleFormVue,
+			TodoList,
+		},
+		setup() {
+			const todos = reactive([]);
+			const addTodo = (todo) => {
+				todos.push(todo);
+			}
+			const updateTodo = (index) => {
+				todos[index].isComplete = !todos[index].isComplete;
+			}
+			const deleteTodo = (index) => {
+				todos.splice(index, 1);
+			}
+			return {
+				todos,
+				addTodo,
+				updateTodo,
+				deleteTodo,
+			}
+		}
+	}
 </script>
 
 <style>
-  .name {
-    color: blue;
-  }
+
 </style>
