@@ -23,9 +23,10 @@
 </template>
 
 <script>
-	import { ref, reactive, computed } from 'vue';
+	import { ref, computed } from 'vue';
 	import TodoSimpleFormVue from './components/TodoSimpleForm.vue';
 	import TodoList from './components/TodoList.vue';
+	import axios from "axios";
 
 	export default {
 		components: {
@@ -33,24 +34,61 @@
 			TodoList,
 		},
 		setup() {
-			const todos = reactive([]);
+			const todos = ref([]);
 			const searchText = ref("");
 			const filteredTodos = computed(() => {
 				if (searchText.value) {
-					return todos.filter(todo => {
+					return todos.value.filter(todo => {
 						return todo.subject.includes(searchText.value);
 					})
 				}
-				return todos;
-			})
-			const addTodo = (todo) => {
-				todos.push(todo);
+				return todos.value;
+			})	
+			const getTodos = async () => {
+				try {
+					const response = await axios.get(
+						"http://localhost:3000/todos"
+					)
+					todos.value = response.data;
+				} catch (error) {
+					console.log(error)
+				}
 			}
-			const updateTodo = (index) => {
-				todos[index].isComplete = !todos[index].isComplete;
+			getTodos();		
+
+			const addTodo = async (todo) => {
+				try {
+					const response = await axios.post(
+						"http://localhost:3000/todos", {
+						subject: todo.subject,
+						isComplete: todo.isComplete,
+					})
+					console.log(response)
+				} catch (error) {
+					console.log(error);
+				}
 			}
-			const deleteTodo = (index) => {
-				todos.splice(index, 1);
+			const updateTodo = async ({index, id}) => {
+				try {
+					const response = await axios.patch(
+						`http://localhost:3000/todos/${id}`, {
+							isComplete: !todos.value[index].isComplete
+						}
+					)
+					console.log(response)
+				} catch (error) {
+					console.log(error)
+				}
+			}
+			const deleteTodo = async (id) => {
+				try {
+					const response = await axios.delete(
+						`http://localhost:3000/todos/${id}`, 
+					)
+					console.log(response);
+				} catch (error) {
+					console.log(error);
+				}
 			}
 			return {
 				todos,

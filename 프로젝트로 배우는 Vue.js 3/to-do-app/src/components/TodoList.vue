@@ -10,12 +10,12 @@
                     class="form-check-input"
                     type="checkbox"
                     :value="todo.isComplete"
-                    @change="toggleTodo(index)"
+                    @change="toggleTodo(index, todo.id)"
                 />
                 <label class="form-check-label" :class="{ todo: todo.isComplete }"> {{ todo.subject }} </label>
             </div>
             <div>
-                <button class="btn btn-danger btn-sm" @click="deleteTodo(index)">Delete</button>
+                <button class="btn btn-danger btn-sm" @click="deleteTodo(todo.id)">Delete</button>
             </div>
         </div>
     </div>
@@ -31,12 +31,12 @@
             }
         },
         setup(props, { emit }) {
-            const toggleTodo = (index) => {
-                emit("toggle-todo", index);
+            const toggleTodo = (index, id) => {
+                emit("toggle-todo", {index, id});
             }
 
-            const deleteTodo = (index) => {
-                emit("delete-todo", index);
+            const deleteTodo = (id) => {
+                emit("delete-todo", id);
             }
 
             return {

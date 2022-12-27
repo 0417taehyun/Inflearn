@@ -24,7 +24,6 @@
                 }
                 else {
                     emit("add-todo", {
-                        id: Date.now(),
                         isComplete: false,
                         subject: todo.value
                     });

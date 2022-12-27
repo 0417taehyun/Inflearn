@@ -1,0 +1,14 @@
+{
+  "todos": [
+    {
+      "subject": "Buy milk",
+      "isComplete": false,
+      "id": 1
+    },
+    {
+      "subject": "Buy Camera",
+      "isComplete": false,
+      "id": 2
+    }
+  ]
+}
