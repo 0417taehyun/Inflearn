@@ -6,15 +6,16 @@
 		type="text"
 		v-model="searchText"
 		placeholder="Search"
+		@keyup.enter="searchTodo"
 	/>
 
 	<hr />
     <TodoSimpleFormVue @add-todo="addTodo" />
-    <div v-if="!filteredTodos.length">
+    <div v-if="!todos.length">
         Empty
     </div>	
 	<TodoList
-		:todos="filteredTodos"
+		:todos="todos"
 		@toggle-todo="updateTodo"
 		@delete-todo="deleteTodo"
 	/>
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-	import { ref, computed } from 'vue';
+	import { ref, computed, watch } from 'vue';
 	import TodoSimpleFormVue from './components/TodoSimpleForm.vue';
 	import TodoList from './components/TodoList.vue';
 	import axios from "axios";
@@ -67,25 +68,29 @@
 				return Math.ceil(totalTodos.value / limit);
 			})
 
+			let timeout = null;
 			const searchText = ref("");
-			const filteredTodos = computed(() => {
-				if (searchText.value) {
-					return todos.value.filter(todo => {
-						return todo.subject.includes(searchText.value);
-					})
-				}
-				return todos.value;
-			})	
+			watch(searchText, () => {
+				clearTimeout(timeout);
+				timeout = setTimeout(() => {
+					getTodos();
+				}, 1500);
+			})
+			const searchTodo = () => {
+				clearTimeout(timeout);
+				getTodos();
+			}
+
 			const getTodos = async (page=currentPage.value) => {
 				try {
 					const response = await axios.get(
-						`http://localhost:3000/todos?_page=${page}&_limit=${limit}`
+						`http://localhost:3000/todos?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
 					)
 					currentPage.value = page;
-					totalTodos.value = response.headers["x-total-count"];
+					totalTodos.value = Number(response.headers["x-total-count"]);
 					todos.value = response.data;
 				} catch (error) {
-					console.log(error)
+					console.log(error);
 				}
 			}
 			getTodos()
@@ -97,7 +102,8 @@
 						subject: todo.subject,
 						isComplete: todo.isComplete,
 					})
-					console.log(response)
+					console.log(response);
+					getTodos();
 				} catch (error) {
 					console.log(error);
 				}
@@ -109,9 +115,10 @@
 							isComplete: !todos.value[index].isComplete
 						}
 					)
-					console.log(response)
+					console.log(response);
+					getTodos();
 				} catch (error) {
-					console.log(error)
+					console.log(error);
 				}
 			}
 			const deleteTodo = async (id) => {
@@ -120,6 +127,7 @@
 						`http://localhost:3000/todos/${id}`, 
 					)
 					console.log(response);
+					getTodos();
 				} catch (error) {
 					console.log(error);
 				}
@@ -127,13 +135,13 @@
 			return {
 				todos,
 				searchText,
-				filteredTodos,
 				totalPages,
 				currentPage,
 				addTodo,
 				updateTodo,
 				deleteTodo,
 				getTodos,
+				searchTodo,
 			}
 		}
 	}
