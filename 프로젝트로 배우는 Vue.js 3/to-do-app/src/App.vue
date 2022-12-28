@@ -18,6 +18,31 @@
 		@toggle-todo="updateTodo"
 		@delete-todo="deleteTodo"
 	/>
+	<hr />
+	<nav aria-label="Page navigation example">
+		<ul class="pagination">
+			<li
+				class="page-item"
+				v-if="currentPage !== 1"
+			>
+				<a class="page-link" @click="getTodos(currentPage-1)"> Previous </a>
+			</li>
+			<li
+				class="page-item"
+				:class="currentPage === page ? 'active' : ''"
+				v-for="page in totalPages"
+				:key="page"
+			>
+				<a class="page-link" @click="getTodos(page)"> {{ page }} </a>
+			</li>
+			<li
+				class="page-item"
+				v-if="currentPage !== totalPages"
+			>
+				<a class="page-link" @click="getTodos(currentPage+1)"> Next </a>
+			</li>
+		</ul>
+	</nav>	
 
   </div>
 </template>
@@ -35,6 +60,13 @@
 		},
 		setup() {
 			const todos = ref([]);
+			const totalTodos = ref(0);
+			const limit = 5;
+			const currentPage = ref(1);
+			const totalPages = computed(() => {
+				return Math.ceil(totalTodos.value / limit);
+			})
+
 			const searchText = ref("");
 			const filteredTodos = computed(() => {
 				if (searchText.value) {
@@ -44,17 +76,19 @@
 				}
 				return todos.value;
 			})	
-			const getTodos = async () => {
+			const getTodos = async (page=currentPage.value) => {
 				try {
 					const response = await axios.get(
-						"http://localhost:3000/todos"
+						`http://localhost:3000/todos?_page=${page}&_limit=${limit}`
 					)
+					currentPage.value = page;
+					totalTodos.value = response.headers["x-total-count"];
 					todos.value = response.data;
 				} catch (error) {
 					console.log(error)
 				}
 			}
-			getTodos();		
+			getTodos()
 
 			const addTodo = async (todo) => {
 				try {
@@ -94,9 +128,12 @@
 				todos,
 				searchText,
 				filteredTodos,
+				totalPages,
+				currentPage,
 				addTodo,
 				updateTodo,
 				deleteTodo,
+				getTodos,
 			}
 		}
 	}
