@@ -1,6 +1,5 @@
 <template>
-	<router-view />
-	<div class="container">
+	<div>
 		<h2>To-do List</h2>
 		<input
 			class="form-control"
@@ -108,11 +107,11 @@
 					console.log(error);
 				}
 			}
-			const updateTodo = async ({index, id}) => {
+			const updateTodo = async (id, checked) => {
 				try {
 					const response = await axios.patch(
 						`http://localhost:3000/todos/${id}`, {
-							isComplete: !todos.value[index].isComplete
+							isComplete: checked
 						}
 					)
 					console.log(response);

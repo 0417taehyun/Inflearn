@@ -96,23 +96,13 @@
       "id": 25
     },
     {
-      "subject": "12345",
-      "isComplete": false,
+      "subject": "두 번째 변경",
+      "isComplete": true,
       "id": 26
     },
     {
-      "subject": "123456612513561354",
-      "isComplete": false,
-      "id": 27
-    },
-    {
-      "subject": "123124124134",
-      "isComplete": false,
-      "id": 28
-    },
-    {
-      "subject": "1231231241",
-      "isComplete": false,
+      "subject": "서브젝트 변경12",
+      "isComplete": true,
       "id": 29
     }
   ]
