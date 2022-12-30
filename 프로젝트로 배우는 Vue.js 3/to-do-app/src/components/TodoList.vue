@@ -13,7 +13,7 @@
           @click.stop
         />
         <label class="form-check-label" :class="{ todo: todo.isComplete }">
-          {{ todo.subject }}
+          {{ todo.title }}
         </label>
       </div>
       <div>

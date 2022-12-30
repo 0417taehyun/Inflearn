@@ -1,6 +1,15 @@
 <template>
   <div>
-    <h2>To-do List</h2>
+    <div class="d-flex justify-content-between mb-3">
+      <h2>To-do List</h2>
+      <router-link
+        type="button"
+        class="btn btn-primary"
+        :to="{ name: 'TodoCreate' }"
+      >
+        Create Todo
+      </router-link>
+    </div>
     <input
       class="form-control"
       type="text"
@@ -80,7 +89,7 @@ export default {
     const getTodos = async (page = currentPage.value) => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/todos?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
+          `http://localhost:3000/todos?_sort=id&_order=desc&title_like=${searchText.value}&_page=${page}&_limit=${limit}`
         );
         currentPage.value = page;
         totalTodos.value = Number(response.headers["x-total-count"]);

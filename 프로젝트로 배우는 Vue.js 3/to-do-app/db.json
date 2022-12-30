@@ -1,109 +1,22 @@
 {
   "todos": [
     {
-      "subject": "Buy milk",
-      "isComplete": true,
+      "title": "첫 번째 투두",
+      "content": "첫 번째 투두의 콘텐츠 영역을 수정해봤습니다.",
+      "isComplete": false,
       "id": 1
     },
     {
-      "subject": "Buy Camera",
-      "isComplete": true,
+      "title": "두 번째 투두입니다.",
+      "content": "예스!",
+      "isComplete": false,
       "id": 2
     },
     {
-      "subject": "5",
+      "title": "세 번째 투두 입니다.",
+      "content": "하이요이이",
       "isComplete": false,
-      "id": 7
-    },
-    {
-      "subject": "7",
-      "isComplete": false,
-      "id": 9
-    },
-    {
-      "subject": "9",
-      "isComplete": false,
-      "id": 11
-    },
-    {
-      "subject": "10",
-      "isComplete": false,
-      "id": 12
-    },
-    {
-      "subject": "11",
-      "isComplete": false,
-      "id": 13
-    },
-    {
-      "subject": "12",
-      "isComplete": false,
-      "id": 14
-    },
-    {
-      "subject": "13",
-      "isComplete": false,
-      "id": 15
-    },
-    {
-      "subject": "14",
-      "isComplete": false,
-      "id": 16
-    },
-    {
-      "subject": "15",
-      "isComplete": false,
-      "id": 17
-    },
-    {
-      "subject": "16",
-      "isComplete": false,
-      "id": 18
-    },
-    {
-      "subject": "17",
-      "isComplete": false,
-      "id": 19
-    },
-    {
-      "subject": "18",
-      "isComplete": false,
-      "id": 20
-    },
-    {
-      "subject": "19",
-      "isComplete": false,
-      "id": 21
-    },
-    {
-      "subject": "20",
-      "isComplete": false,
-      "id": 22
-    },
-    {
-      "subject": "123",
-      "isComplete": false,
-      "id": 23
-    },
-    {
-      "subject": "1234",
-      "isComplete": false,
-      "id": 24
-    },
-    {
-      "subject": "123",
-      "isComplete": false,
-      "id": 25
-    },
-    {
-      "subject": "두 번째 변경",
-      "isComplete": true,
-      "id": 26
-    },
-    {
-      "subject": "서브젝트 변경",
-      "isComplete": false,
-      "id": 29
+      "id": 3
     }
   ]
 }
