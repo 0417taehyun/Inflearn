@@ -37,18 +37,22 @@
       </ul>
     </nav>
   </div>
+  <Toast v-if="showToast" :message="toastMessage" :isSuccess="isSuccess" />
 </template>
 
 <script>
 import { ref, computed, watch } from "vue";
 import TodoSimpleFormVue from "@/components/TodoSimpleForm.vue";
 import TodoList from "@/components/TodoList.vue";
+import Toast from "@/components/Toast.vue";
+import { useToast } from "@/hooks/toast";
 import axios from "axios";
 
 export default {
   components: {
     TodoSimpleFormVue,
     TodoList,
+    Toast,
   },
   setup() {
     const todos = ref([]);
@@ -58,6 +62,7 @@ export default {
     const totalPages = computed(() => {
       return Math.ceil(totalTodos.value / limit);
     });
+    const { isSuccess, toastMessage, showToast, triggerToast } = useToast();
 
     let timeout = null;
     const searchText = ref("");
@@ -81,7 +86,7 @@ export default {
         totalTodos.value = Number(response.headers["x-total-count"]);
         todos.value = response.data;
       } catch (error) {
-        console.log(error);
+        triggerToast("Something went wrong", false);
       }
     };
     getTodos();
@@ -95,7 +100,7 @@ export default {
         console.log(response);
         getTodos();
       } catch (error) {
-        console.log(error);
+        triggerToast("Something went wrong", false);
       }
     };
     const updateTodo = async (id, checked) => {
@@ -109,7 +114,7 @@ export default {
         console.log(response);
         getTodos();
       } catch (error) {
-        console.log(error);
+        triggerToast("Something went wrong", false);
       }
     };
     const deleteTodo = async (id) => {
@@ -120,7 +125,7 @@ export default {
         console.log(response);
         getTodos();
       } catch (error) {
-        console.log(error);
+        triggerToast("Something went wrong", false);
       }
     };
     return {
@@ -128,6 +133,9 @@ export default {
       searchText,
       totalPages,
       currentPage,
+      toastMessage,
+      isSuccess,
+      showToast,
       addTodo,
       updateTodo,
       deleteTodo,

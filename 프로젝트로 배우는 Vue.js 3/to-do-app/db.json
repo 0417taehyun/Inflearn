@@ -91,7 +91,7 @@
       "id": 24
     },
     {
-      "subject": "12",
+      "subject": "123",
       "isComplete": false,
       "id": 25
     },
@@ -101,8 +101,8 @@
       "id": 26
     },
     {
-      "subject": "서브젝트 변경12",
-      "isComplete": true,
+      "subject": "서브젝트 변경",
+      "isComplete": false,
       "id": 29
     }
   ]

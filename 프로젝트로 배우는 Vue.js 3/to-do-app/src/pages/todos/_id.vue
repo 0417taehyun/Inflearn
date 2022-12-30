@@ -31,6 +31,7 @@
       Cancle
     </button>
   </form>
+  <Toast v-if="showToast" :message="toastMessage" :isSuccess="isSuccess" />
 </template>
 
 <script>
@@ -38,8 +39,13 @@ import { ref, computed } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import _ from "lodash";
+import Toast from "@/components/Toast.vue";
+import { useToast } from "@/hooks/toast";
 
 export default {
+  components: {
+    Toast,
+  },
   setup() {
     const todo = ref({
       id: null,
@@ -49,12 +55,18 @@ export default {
     const previousTodo = ref({ ...todo.value });
     const route = useRoute();
     const router = useRouter();
+    const { isSuccess, toastMessage, showToast, triggerToast } = useToast();
+
     const getTodo = async () => {
-      const response = await axios.get(
-        `http://localhost:3000/todos/${route.params.id}`
-      );
-      todo.value = { ...response.data };
-      previousTodo.value = { ...response.data };
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/todos/${route.params.id}`
+        );
+        todo.value = { ...response.data };
+        previousTodo.value = { ...response.data };
+      } catch (error) {
+        triggerToast("Something went wrong", false);
+      }
     };
 
     getTodo();
@@ -67,11 +79,16 @@ export default {
       });
     };
     const onSave = async () => {
-      const response = await axios.put(
-        `http://localhost:3000/todos/${route.params.id}`,
-        { subject: todo.value.subject, isComplete: todo.value.isComplete }
-      );
-      previousTodo.value = { ...response.data };
+      try {
+        const response = await axios.put(
+          `http://localhost:3000/todos/${route.params.id}`,
+          { subject: todo.value.subject, isComplete: todo.value.isComplete }
+        );
+        previousTodo.value = { ...response.data };
+        triggerToast("Successfully updated", true);
+      } catch (error) {
+        triggerToast("Something went wrong", false);
+      }
     };
 
     const todoUpdated = computed(() => {
@@ -84,6 +101,9 @@ export default {
       moveTodoListPage,
       onSave,
       todoUpdated,
+      showToast,
+      toastMessage,
+      isSuccess,
     };
   },
 };
