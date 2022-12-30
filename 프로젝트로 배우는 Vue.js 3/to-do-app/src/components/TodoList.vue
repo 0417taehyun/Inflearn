@@ -2,19 +2,20 @@
   <div v-for="todo in todos" :key="todo.id" class="card mt-2">
     <div
       class="card-body p-2 d-flex align-items-center"
+      style="cursor: pointer"
       @click="getTodo(todo.id)"
     >
-      <div class="form-check flex-grow-1">
+      <div class="flex-grow-1">
         <input
-          class="form-check-input"
+          class="ml-2 mr-2"
           type="checkbox"
           :checked="todo.isComplete"
           @change="toggleTodo(todo.id, $event)"
           @click.stop
         />
-        <label class="form-check-label" :class="{ todo: todo.isComplete }">
+        <span :class="{ todo: todo.isComplete }">
           {{ todo.title }}
-        </label>
+        </span>
       </div>
       <div>
         <button class="btn btn-danger btn-sm" @click.stop="deleteTodo(todo.id)">
