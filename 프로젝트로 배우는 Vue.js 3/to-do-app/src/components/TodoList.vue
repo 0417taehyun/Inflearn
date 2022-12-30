@@ -18,16 +18,25 @@
         </span>
       </div>
       <div>
-        <button class="btn btn-danger btn-sm" @click.stop="deleteTodo(todo.id)">
+        <button class="btn btn-danger btn-sm" @click.stop="openModal(todo.id)">
           Delete
         </button>
       </div>
     </div>
   </div>
+  <Teleport to="#modal">
+    <DeleteModal
+      v-if="showModal"
+      @close-modal="closeModal"
+      @delete-todo="deleteTodo"
+    />
+  </Teleport>
 </template>
 
 <script>
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import DeleteModal from "@/components/DeleteModal.vue";
 
 export default {
   emits: ["toggle-todo", "delete-todo"],
@@ -37,16 +46,28 @@ export default {
       required: true,
     },
   },
+  components: {
+    DeleteModal,
+  },
   setup(props, { emit }) {
+    const deleteTodoId = ref(0);
+    const showModal = ref(false);
     const router = useRouter();
     const toggleTodo = (id, event) => {
       emit("toggle-todo", id, event.target.checked);
     };
-
-    const deleteTodo = (id) => {
-      emit("delete-todo", id);
+    const openModal = (id) => {
+      showModal.value = true;
+      deleteTodoId.value = id;
     };
-
+    const closeModal = () => {
+      showModal.value = false;
+      deleteTodoId.value = 0;
+    };
+    const deleteTodo = () => {
+      emit("delete-todo", deleteTodoId.value);
+      closeModal();
+    };
     const getTodo = (id) => {
       router.push({
         name: "Todo",
@@ -55,11 +76,13 @@ export default {
         },
       });
     };
-
     return {
       toggleTodo,
       deleteTodo,
       getTodo,
+      openModal,
+      closeModal,
+      showModal,
     };
   },
 };
